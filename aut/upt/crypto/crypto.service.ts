@@ -1,7 +1,6 @@
 import {CryptoFunction} from './cryptoFunction';
 import {HashFunction} from './hashFunction';
 import {KeyUsage} from './keyUsage';
-import {DerivedKeyAlgorithm} from './derivedKeyAlgorithm';
 import {KeyFormat} from './keyFormat';
 import {KeyData} from './keyData';
 
@@ -113,7 +112,7 @@ export interface CryptoService {
      *
      * @return - is a Promise that returns the derivated key as a CryptoKey or a CryptoKeyPair.
      */
-    deriveKey(algo: CryptoFunction, masterKey: CryptoKey, derivedKeyAlgo: DerivedKeyAlgorithm, extractable: Boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>
+    deriveKey(algo: CryptoFunction, masterKey: CryptoKey, derivedKeyAlgo: CryptoFunction, extractable: Boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>
 
     /**
      * Returns a Promise of the CryptoKey generated from the data given in parameters.
