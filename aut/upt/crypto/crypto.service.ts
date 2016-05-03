@@ -6,6 +6,8 @@ import {KeyFormat} from './keyFormat';
 import {KeyData} from './keyData';
 
 /**
+ * Created by nhack
+ *
  * The CryptoService interface represents a set of cryptographic primitives.
  */
 export interface CryptoService {
@@ -136,5 +138,62 @@ export interface CryptoService {
      *
      * @return - is a Promise that returns the generated CryptoKey.
      */
-    importKey(format: KeyFormat, keyData: KeyData, algo: CryptoFunction, extractable: Boolean, usages: KeyUsage[])
+    importKey(format: KeyFormat, keyData: KeyData, algo: CryptoFunction, extractable: Boolean, usages: KeyUsage[]): Promise<CryptoKey>
+
+    /**
+     * Returns a Promise of the key encrypted in the requested format. If the key is not extractable, that is if CryptoKey.extractable returns false, the promise fails with an InvalidAccessError exception; it the format is unknown, the promive fails with a NotSupported exception.
+     *
+     * @param format - is an enumerated value describing the data format of the key to imported. It can be one of the following:
+     *  "raw", the key as an array of bytes, usually a secret key.
+     *  "pkcs8" a private key, in the IETF Public Key-Cryptographic Standard Encryption #8.
+     *  "spki", usually a public key, in the Simple public key infrastructure standard
+     *  "jwk", the key in the JSON Web Key format.
+     * @param key - is the CryptoKey to export.
+     *
+     * @return - is a Promise that returns the key in the requested format.
+     */
+    exportKey(format: KeyFormat, key: CryptoKey): Promise<ArrayBuffer>
+
+    /**
+     * Returns a Promise of a wrapped symmetric key for usage (transfer, storage) in unsecure environments. The wrapped buffer returned is in the format given in parameters, and contained the key wrapped by the give wrapping key with the given algorithm.
+     *
+     * @param format - is an enumerated value describing the data format of the key to imported. It can be one of the following:
+     *  "raw", the key as an array of bytes, usually a secret key.
+     *  "pkcs8" a private key, in the IETF Public Key-Cryptographic Standard Encryption #8.
+     *  "spki", usually a public key, in the Simple public key infrastructure standard
+     *  "jwk", the key in the JSON Web Key format.
+     * @param key - is the CryptoKey to export.
+     * @param wrappingKey - is the CryptoKey used to perform the wrapping.
+     * @param wrapAlgo - is the DOMString representing the algorithm used to perform the wrapping. It is one of the following: AES-CBC, AES-CTR, AES-GCM, RSA-OAEP, and AES-KW.
+     *
+     * @return - is a Promise that returns the wrapped key in the requested format.
+     */
+    wrapKey(format: KeyFormat, key: CryptoKey, wrappingKey: CryptoKey, wrapAlgo: CryptoFunction): Promise<ArrayBuffer>
+
+    /**
+     * Returns a Promise of a CryptoKey corresponding to the wrapped key given in parameter.
+     *
+     * @param format - is an enumerated value describing the data format of the key to imported. It can be one of the following:
+     *  "raw", the key as an array of bytes, usually a secret key.
+     *  "pkcs8" a private key, in the IETF Public Key-Cryptographic Standard Encryption #8.
+     *  "spki", usually a public key, in the Simple public key infrastructure standard
+     *  "jwk", the key in the JSON Web Key format.
+     * @param wrappedKey - is a ArrayBuffer or a ... containing the wrapped key in the given format.
+     * @param unwrappingKey - is the CryptoKey to use to unwrap.
+     * @param unwrapAlgo - is the DOMString representing the algorithm used to perform the unwrapping. It is one of the following: AES-CBC, AES-CTR, AES-GCM, RSA-OAEP, and AES-KW.
+     * @param unwrappedKeyAlgo - is the DOMString representing the algorithm of the wrapped key.
+     * @param extractable - is a Boolean indicating if the key can be extracted from the CryptoKey object at a later stage.
+     * @param keyUsages - is an Array indicating what can be done with the unwrapped key. Possible values of the array are:
+     *  "encrypt", allowing the key to be used for encrypting messages.
+     *  "decrypt", allowing the key to be used for decrypting messages.
+     *  "sign", allowing the key to be used for signing messages.
+     *  "verify", allowing the key to be used for verifying the signature of messages.
+     *  "deriveKey", allowing the key to be used as a base key when deriving a new key.
+     *  "deriveBits", allowing the key to be used as a base key when deriving bits of data for use in cryptographic primitives.
+     *  "wrapKey", allowing the key to wrap a symmetric key for usage (transfer, storage) in unsecure environments.
+     *  "unwrapKey", allowing the key to unwrap a symmetric key for usage (transfer, storage) in unsecure environments.
+     *
+     * @return - is a Promise that returns the unwrapped key as a CryptoKey
+     */
+    unwrapKey(format: KeyFormat, wrappedKey: ArrayBuffer, unwrappingKey:CryptoKey, unwrapAlgo: CryptoFunction, unwrappedKeyAlgo: CryptoFunction, extractable: Boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>
 }
