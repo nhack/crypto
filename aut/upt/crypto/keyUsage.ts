@@ -1,17 +1,17 @@
 export class KeyUsage {
-  constructor(public val: string){
+  private constructor(private val: string){
   }
 
   toString() {
     return this.val;
   }
 
-  static ENCRYPT = "encrypt";
-  static DECRYPT = "decrypt";
-  static SIGN = "sign";
-  static VERIFY = "verify";
-  static DERIVE_KEY = "deriveKey";
-  static DERIVE_BITS = "deriveBits";
-  static WRAP_KEY = "wrapKey";
-  static UNWRAP_KEY = "unwrapKey";
+  static ENCRYPT = new KeyUsage("encrypt");
+  static DECRYPT = new KeyUsage("decrypt");
+  static SIGN = new KeyUsage("sign");
+  static VERIFY = new KeyUsage("verify");
+  static DERIVE_KEY = new KeyUsage("deriveKey");
+  static DERIVE_BITS = new KeyUsage("deriveBits");
+  static WRAP_KEY = new KeyUsage("wrapKey");
+  static UNWRAP_KEY = new KeyUsage("unwrapKey");
 }

@@ -1,12 +1,12 @@
 export class KeyFormat {
-  constructor (public val: string){}
+  private constructor (private val: string){}
 
   toString() {
     return this.val;
   }
 
-  static RAW = 'raw';
-  static PKCS8 = 'pkcs8';
-  static SPKI = 'spki';
-  static JWK = 'jwk';
+  static RAW = new KeyFormat('raw');
+  static PKCS8 = new KeyFormat('pkcs8');
+  static SPKI = new KeyFormat('spki');
+  static JWK = new KeyFormat('jwk');
 }
