@@ -1,5 +1,5 @@
 export class KeyUsage {
-  private constructor(private val: string){
+  constructor(private val: string){
   }
 
   toString() {
